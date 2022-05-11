@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import IniciarSesion from "./layout/IniciarSesion";
 import Layout from "./layout/Layout";
+import ClientDetails from "./pages/ClientDetails";
 import CreateClient from "./pages/CreateClient";
 import Home from "./pages/Home";
 import LoginForm from "./pages/LoginForm";
@@ -21,6 +22,7 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="create" element={<CreateClient />} />
                     <Route path="update/:clientId" element={<UpdateClient />} />
+                    <Route path=":clientId" element={<ClientDetails />} />
                 </Route>
             </Routes>
         </BrowserRouter>

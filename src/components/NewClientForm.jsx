@@ -10,9 +10,8 @@ const NewClientForm = () => {
             surname: "",
             phone: "",
         },
-        onSubmit: (values) => {
-            console.log(formik.touched);
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            await handleSubmit(values);
         },
         validationSchema: Yup.object({
             name: Yup.string().required("Name is required"),
@@ -21,6 +20,28 @@ const NewClientForm = () => {
             phone: Yup.string().required("Phone is required"),
         })
     });
+
+    const handleSubmit = async (values) => {
+        try {
+            const url = "http://localhost:4000/clients";
+    
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(values),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            console.log(response);
+            const result = await response.json();
+            console.log(result);
+
+            
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 
     return (
         <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md md:w-3/4 mx-auto">
@@ -37,8 +58,7 @@ const NewClientForm = () => {
                         type="text"
                         className="mt-2 block w-full p-3 bg-gray-50"
                         placeholder="Nombre del cliente"
-                        onChange={formik.handleChange}
-                        value={formik.values.name}
+                        {...formik.getFieldProps('name')}
                     />
                 </div>
                 {formik.errors.name ? <InputErrorForm message={formik.errors.name} /> : null}
@@ -53,8 +73,7 @@ const NewClientForm = () => {
                         type="text"
                         className="mt-2 block w-full p-3 bg-gray-50"
                         placeholder="Apellidos del cliente"
-                        onChange={formik.handleChange}
-                        value={formik.values.surname}
+                        {...formik.getFieldProps('surname')}
                     />
                 </div>
                 {formik.errors.surname ? <InputErrorForm message={formik.errors.surname} /> : null}
@@ -69,8 +88,7 @@ const NewClientForm = () => {
                         type="email"
                         className="mt-2 block w-full p-3 bg-gray-50"
                         placeholder="Correo electrónico"
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
+                        {...formik.getFieldProps('email')}
                     />
                 </div>
                 {formik.errors.email ? <InputErrorForm message={formik.errors.email} /> : null}
@@ -85,8 +103,7 @@ const NewClientForm = () => {
                         type="tel"
                         className="mt-2 block w-full p-3 bg-gray-50"
                         placeholder="Teléfono"
-                        onChange={formik.handleChange}
-                        value={formik.values.phone}
+                        {...formik.getFieldProps('phone')}
                     />
                 </div>
                 {formik.errors.phone ? <InputErrorForm message={formik.errors.phone} /> : null}

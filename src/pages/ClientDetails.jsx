@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import NewClientForm2 from "../components/NewClientForm2";
 import Spinner from "../components/Spinner";
 
-const UpdateClient = () => {
+const ClientDetails = () => {
     const { clientId } = useParams();
     const [client, setClient] = useState({});
     const [loading, setloading] = useState(false);
@@ -16,10 +15,12 @@ const UpdateClient = () => {
                 const url = `http://localhost:4000/clients/${clientId}`;
                 const response = await fetch(url);
                 if (response.status == 200) {
+                    console.log("encontrado");
                     const result = await response.json();
                     setClient(result);
                 }
             } catch (error) {
+                console.log("catch");
                 alert(error.message);
             }
 
@@ -30,19 +31,19 @@ const UpdateClient = () => {
     }, []);
 
     return (
-        <>
-            <h1 className="font-black text-4xl text-blue-900">Update Client</h1>
-            <p>Utiliza este formulario para editar los datos</p>
-
-            {loading === true ? (
+        <div>
+            {loading ? (
                 <Spinner />
-            ) : Object.keys(client).length > 0 ? (
-                <NewClientForm2 client={client} />
+            ) : Object.keys(client).length === 0 ? (
+                <h2 className="text-center">No hay resultados</h2>
             ) : (
-                <h2 className="text-center">Client not found</h2>
+                <p>
+                    <label className="text-gray-700 font-bold">Cliente: </label>
+                    {client.name}
+                </p>
             )}
-        </>
+        </div>
     );
 };
 
-export default UpdateClient;
+export default ClientDetails;
